@@ -1,0 +1,21 @@
+[33mcommit ba3bf060b7809dde4a845255da4f5a329512e9fa[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mIsabel[m[33m)[m
+Author: angel1701-lap <1538852@senati.pe>
+Date:   Wed Nov 12 17:05:11 2025 -0500
+
+    cambios 12
+
+ client/src/components/MLDashboard.jsx   | 227 [32m++++++++++++++++++++++++++++[m
+ client/src/services/mlService.js        | 149 [32m++++++++++++++++++[m
+ server/ml/API_EXAMPLES.md               | 258 [32m++++++++++++++++++++++++++++++++[m
+ server/ml/QUICKSTART.md                 | 200 [32m+++++++++++++++++++++++++[m
+ server/ml/README.md                     | 161 [32m++++++++++++++++++++[m
+ server/ml/examples/basicUsage.js        | 128 [32m++++++++++++++++[m
+ server/ml/models/salesPredictor.js      | 164 [32m++++++++++++++++++++[m
+ server/ml/models/timeSeriesPredictor.js | 149 [32m++++++++++++++++++[m
+ server/ml/services/mlService.js         | 189 [32m+++++++++++++++++++++++[m
+ server/ml/test/mlTest.js                |  90 [32m+++++++++++[m
+ server/ml/utils/dataPreprocessor.js     | 192 [32m++++++++++++++++++++++++[m
+ server/ml/utils/modelStorage.js         |  96 [32m++++++++++++[m
+ server/routes/ml.routes.js              | 224 [32m+++++++++++++++++++++++++++[m
+ server/server.js                        |   2 [32m+[m
+ 14 files changed, 2229 insertions(+)
