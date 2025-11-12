@@ -1,5 +1,40 @@
 # Machine Learning Module
 
+Sistema de predicción de ventas usando regresión lineal múltiple con características enriquecidas.
+
+## 🚀 Inicio Rápido
+
+### 1. Verificar Base de Datos
+```bash
+npm run check:db
+```
+
+### 2. Entrenar con Datos Reales
+```bash
+npm run train
+```
+
+### 3. O Entrenar con Datos de Ejemplo
+```bash
+npm run train:sample
+```
+
+## 📚 Documentación Completa
+
+- **[INICIO_RAPIDO.md](./INICIO_RAPIDO.md)** - Guía rápida para empezar
+- **[ENTRENAMIENTO_REAL.md](./ENTRENAMIENTO_REAL.md)** - Guía completa de entrenamiento
+- **[MEJORAS_MODELO.md](./MEJORAS_MODELO.md)** - Detalles técnicos de las mejoras
+
+## 🗄️ Datos de Ejemplo
+
+Si no tienes datos reales, usa el script SQL:
+
+```bash
+mysql -u root -p zapatillas < server/data/sample_sales_data.sql
+```
+
+---
+
 Este módulo proporciona capacidades de Machine Learning para predicción de ventas y análisis de series temporales.
 
 ## Características

@@ -6,7 +6,10 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "train": "node ml/examples/trainWithRealData.js",
+    "train:sample": "node ml/examples/enrichedTraining.js",
+    "check:db": "node ml/examples/checkDatabase.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
