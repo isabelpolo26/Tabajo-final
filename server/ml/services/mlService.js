@@ -10,17 +10,36 @@ class MLService {
   }
 
   /**
-   * Train sales prediction model
+   * Train sales prediction model with enhanced features
    */
   async trainSalesModel(salesData, options = {}) {
     try {
-      // Transform data to required format
-      const trainingData = salesData.map((item, index) => ({
-        x: index,
-        y: item.amount || item.sales || item.value
-      }))
+      if (!salesData || salesData.length < 3) {
+        throw new Error('Need at least 3 data points for training')
+      }
 
-      const result = this.salesModel.train(trainingData, options)
+      // Enrich data with additional features if not present
+      const enrichedData = salesData.map((item, index) => {
+        const date = item.date ? new Date(item.date) : new Date()
+        
+        return {
+          ...item,
+          dayOfWeek: item.dayOfWeek !== undefined ? item.dayOfWeek : date.getDay(),
+          month: item.month !== undefined ? item.month : date.getMonth() + 1,
+          isWeekend: item.isWeekend !== undefined ? item.isWeekend : (date.getDay() === 0 || date.getDay() === 6),
+          isHoliday: item.isHoliday || false,
+          promotions: item.promotions || 0,
+          temperature: item.temperature || 20,
+          customerCount: item.customerCount || 0
+        }
+      })
+
+      const result = this.salesModel.train(enrichedData, {
+        learningRate: options.learningRate || 0.01,
+        epochs: options.epochs || 2000,
+        verbose: options.verbose || false,
+        earlyStoppingPatience: options.earlyStoppingPatience || 50
+      })
       
       // Save model
       if (options.save) {
@@ -30,7 +49,9 @@ class MLService {
       return {
         success: true,
         model: result,
-        dataPoints: trainingData.length
+        dataPoints: enrichedData.length,
+        featureImportance: this.salesModel.getFeatureImportance(),
+        history: this.salesModel.getHistory()
       }
     } catch (error) {
       throw new Error(`Training failed: ${error.message}`)
@@ -101,23 +122,37 @@ class MLService {
   }
 
   /**
-   * Evaluate model performance
+   * Evaluate model performance with comprehensive metrics
    */
   async evaluateModel(testData) {
     try {
-      const formattedData = testData.map((item, index) => ({
-        x: index,
-        y: item.amount || item.sales || item.value
-      }))
+      // Enrich test data with features
+      const enrichedData = testData.map((item, index) => {
+        const date = item.date ? new Date(item.date) : new Date()
+        
+        return {
+          ...item,
+          dayOfWeek: item.dayOfWeek !== undefined ? item.dayOfWeek : date.getDay(),
+          month: item.month !== undefined ? item.month : date.getMonth() + 1,
+          isWeekend: item.isWeekend !== undefined ? item.isWeekend : (date.getDay() === 0 || date.getDay() === 6),
+          isHoliday: item.isHoliday || false,
+          promotions: item.promotions || 0,
+          temperature: item.temperature || 20,
+          customerCount: item.customerCount || 0
+        }
+      })
 
-      const evaluation = this.salesModel.evaluate(formattedData)
+      const evaluation = this.salesModel.evaluate(enrichedData)
       
       return {
         metrics: {
           mae: evaluation.mae,
-          rmse: evaluation.rmse
+          rmse: evaluation.rmse,
+          mape: evaluation.mape,
+          r2: evaluation.r2
         },
-        predictions: evaluation.predictions.slice(0, 10) // Return first 10
+        predictions: evaluation.predictions,
+        featureImportance: this.salesModel.getFeatureImportance()
       }
     } catch (error) {
       throw new Error(`Evaluation failed: ${error.message}`)
@@ -125,16 +160,19 @@ class MLService {
   }
 
   /**
-   * Get model insights
+   * Get model insights with feature importance
    */
   getModelInsights() {
     const insights = {
       salesModel: {
         trained: this.salesModel.trained,
         parameters: this.salesModel.trained ? {
-          weight: this.salesModel.weights,
-          bias: this.salesModel.bias
-        } : null
+          weights: this.salesModel.weights,
+          bias: this.salesModel.bias,
+          numFeatures: this.salesModel.weights ? this.salesModel.weights.length : 0
+        } : null,
+        featureImportance: this.salesModel.trained ? this.salesModel.getFeatureImportance() : null,
+        trainingHistory: this.salesModel.trained ? this.salesModel.getHistory() : null
       },
       timeSeriesModel: {
         trained: !!this.timeSeriesModel.trend,
