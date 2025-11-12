@@ -12,7 +12,7 @@ class MLService {
   /**
    * Train sales prediction model
    */
-  async trainSalesModel(salesData, options = {}) {
+  async trainSalesModel(SalesData, options = {}) {
     try {
       // Transform data to required format
       const trainingData = salesData.map((item, index) => ({
