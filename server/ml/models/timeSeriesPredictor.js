@@ -1,4 +1,4 @@
-/**
+  /**
  * Time Series Prediction Model
  * Uses moving averages and trend analysis
  */
